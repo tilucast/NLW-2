@@ -44,7 +44,7 @@ Digite em sua cmd ```` npm run knex:migrate ```` para gerar o arquivo do banco d
 
 # Mobile
 
-Na psta mobile, em **src/services/api.ts** existe essa configuração: 
+Na pasta mobile, em **src/services/api.ts** existe essa configuração: 
 
 ```` 
 const api = axios.create({
@@ -52,7 +52,7 @@ const api = axios.create({
 })
 
 ````
-Após rodar o comando para rodar o expo ```` npm run start / yarn start ```` , a interface irá abrir, 
+Após rodar o comando para iniciar o expo ```` npm run start / yarn start ```` , a interface irá abrir, 
 e lá vocẽ terá acesso à porta do seu dispositivo móvel. Troque **192.168.2.15** por seu próprio endereço.
 
 
