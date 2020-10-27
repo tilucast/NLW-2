@@ -1,0 +1,73 @@
+#success-page {
+    position: absolute;
+    z-index: 100;
+
+    display: grid;
+    place-items: center;
+
+    height: 100%;
+    width: 100%;
+
+    background-color:rgba(119,77,214, 0.98);
+    background-image: url(../../assets/images/success-background.svg);
+    background-size: contain;
+
+    animation: AnimatePopup .4s linear;
+}
+
+#success-page section{
+    display: grid;
+    place-items: center;
+
+    height: 45%;
+    width: 100%;
+}
+
+#success-page section img{
+    width: 8rem;
+}
+
+#success-page p, #success-page h1, #success-page span{
+    color: #fff;
+}
+
+#success-page section h1{
+    font-family: Archivo;
+    font-size: 3.3rem;
+    font-style: normal;
+    font-weight: 700;
+    text-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
+
+#success-page section p{
+    font-family: Poppins;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 400;
+    color: #D4C2FF;
+    max-width: 340px;
+    text-align: center;
+}
+
+#success-page section button{
+    text-align: center;
+    padding: 15px 30px;
+
+    background: #04D361;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    transition: all .2s
+}
+
+#success-page section button:hover{
+    filter: brightness(90%);
+    cursor: pointer;
+}
+
+@keyframes AnimatePopup{
+    0%{
+        transform: translateX(450px);
+    }
+}

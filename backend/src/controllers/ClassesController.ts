@@ -1,5 +1,6 @@
 import {Request, Response} from 'express'
 import db from '../database/connection'
+import api from '../services/api'
 import convertHourToMinutes from '../utils/convertHoursToMinutes'
 
 interface ScheduleItem {
@@ -9,16 +10,10 @@ interface ScheduleItem {
 }
 
 export default class ClassesController{
-    constructor(){
-        
-    }
-
     async index(request: Request, response: Response){
         const filters = request.query
         if(!filters.subject || !filters.week_day || !filters.time){
-            return response.status(400).json({
-                error: 'Missing filters to search classes'
-            })
+            return response.status(400).json({error: 'Missing filters to search for classes.'})
         }
 
         const subject = filters.subject as string
@@ -28,32 +23,41 @@ export default class ClassesController{
         const timeInMinutes = convertHourToMinutes(time)
 
         const classes = await db('classes')
-            .whereExists(function (){
-                this.select('class_schedule.*')
-                    .from('class_schedule')
-                    .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
-                    .whereRaw('`class_schedule`.`week_day` = ??', Number([week_day]))
-                    .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
-                    .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes])
-            })
-            .where('classes.subject', '=', subject)
-            .join('users', 'classes.user_id', '=', 'users.id')
-            
-
+        .whereExists(function (){
+            this.select('class_schedule.*')
+                .from('class_schedule')
+                .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
+                .whereRaw('`class_schedule`.`week_day` = ??', Number([week_day]))
+                .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
+                .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes])
+        })
+        .where('classes.subject', '=', subject)
+        .join('users', 'classes.user_id', '=', 'users.id')
+        .join('user', 'users.email', '=', 'user.email')
+        
         return response.json(classes)
         
     }
 
     async create(req: Request, res: Response)  {
         const {
-            name, avatar, whatsapp, bio, subject, cost, schedule
+            subject, cost, schedule
         } = req.body
-    
+
+        const email = req.headers.email
+
+        /*const {data} = await api.get('/user', {
+            headers: {'auth-token': req.headers['auth-token'] ,
+            'email': email}
+        }) */
+
         const trx = await db.transaction()
-        
+
         try{
-            const insertedUsersIds = await trx('users').insert({
-                name, avatar, whatsapp, bio
+
+           const insertedUsersIds = await trx('users').insert({
+               email
+                //name: data[0].name, avatar: data[0].path, whatsapp: data[0].whatsapp, bio: data[0].bio
             })
         
             const user_id  = insertedUsersIds[0]
@@ -77,12 +81,15 @@ export default class ClassesController{
         
             await trx.commit()
         
-            return res.status(201).send()
+            return res.status(201).json('Classe criada com sucesso.')
+
         }catch(err){
             await trx.rollback()
+
+            console.error(err)
     
             return res.status(400).json({
-                error: 'Unexpected erro while creating new class'
+                error: 'Unexpected error while creating new class'
             })
         }
     }

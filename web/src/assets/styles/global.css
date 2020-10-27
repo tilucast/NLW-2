@@ -1,6 +1,4 @@
 :root{
-    font-size: 60%;
-
     --color-background: #F0F0F7;
     --color-primary-lighter: #9871F5;
     --color-primary-light: #916BEA;
@@ -28,6 +26,10 @@
     box-sizing: border-box;
 }
 
+html{
+    font-size: 60%;
+}
+
 html, body, #root{
     height: 100vh;
 }
@@ -50,10 +52,4 @@ body, input, button, textarea{
 .container{
     width: 90vw;
     max-width: 700px;
-}
-
-@media (min-width: 700px){
-    :root{
-        font-size: 62.5%
-    }
 }

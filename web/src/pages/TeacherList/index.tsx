@@ -1,15 +1,20 @@
-import React, { useState, FormEvent } from 'react'
-import './styles.css'
+import React, { useState, FormEvent, useEffect } from 'react'
+
 import PageHeader from '../../components/PageHeader'
 import TeacherItem, {Teacher} from '../../components/TeacherItem'
 import Input from '../../components/input'
 import Select from '../../components/Select'
 import api from '../../services/api'
 
+import smileIcon from '../../assets/images/icons/smile.svg'
+
+import './styles.css'
 
 function TeacherList(){
 
     const [teachers, setTeachers] = useState([])
+    const [amountOfTeachers, setAmountOfTeachers] = useState([])
+    const [noProfessorFound, setNoProfessorFound] = useState('')
 
     const [subject, setSubject] = useState('')
     const [week_day, setWeekDay] = useState('')
@@ -18,20 +23,41 @@ function TeacherList(){
     async function searchTeachers(e: FormEvent){
         e.preventDefault()
 
-        const getClasses = await api.get('classes', {
-            params: {
-                subject, week_day, time
-            }
-        })
+        try{
+            const getClasses = await api.get('classes', {
+                params: {
+                    subject, week_day, time
+                },
+                headers: {'auth-token': localStorage.getItem('auth-token')}
+            })
+            setTeachers(getClasses.data)
+            
+            getClasses.data.length === 0 ? 
+                setNoProfessorFound('Nenhum professor foi encontrado com sua pesquisa.') : 
+                setNoProfessorFound('')
 
-        setTeachers(getClasses.data)
+        }catch(error){
+            console.log(error.response)
+        }
     }
+
+    useEffect(() => {
+        api.get('/professors').then(response => {
+            setAmountOfTeachers(response.data.total)
+        })
+    }, [])
 
     return (
         <div id="page-teacher-list" className="container">
             <PageHeader title="Estes são os proffys disponíveis.">
+
+                <section>
+                    <img src={smileIcon} alt=""/>
+                    <p>Nós temos {amountOfTeachers} professores disponíveis.</p>
+                </section>
+
                 <form id="search-teachers" onSubmit={searchTeachers}>
-                <Select
+                    <Select
                         name="subject" 
                         label="Matéria"
                         value={subject}
@@ -75,12 +101,16 @@ function TeacherList(){
                     </button>
                 </form>
             </PageHeader>
+            
+                <main>
+                    {teachers.map((teacher: Teacher) => {
+                        
+                        return <TeacherItem key={teacher.id} teacher={teacher} />
+                    })}
 
-            <main>
-                {teachers.map((teacher: Teacher) => {
-                    return <TeacherItem key={teacher.id} teacher={teacher} />
-                })}
-            </main>
+                    {noProfessorFound && <p className="BouncingP">{noProfessorFound}</p>}
+                </main>
+            
         </div>
     )
 }

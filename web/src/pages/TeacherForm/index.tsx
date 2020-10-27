@@ -1,20 +1,24 @@
-import React, {useState, FormEvent} from 'react'
+import React, {useState, FormEvent, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
+
 import PageHeader from '../../components/PageHeader'
-import './styles.css'
 import Input from '../../components/input'
 import warningIcon from '../../assets/images/icons/warning.svg'
 import Textarea from '../../components/Textarea'
 import Select from '../../components/Select'
 import api from '../../services/api'
 
+import emptyUserIcon from '../../assets/images/icons/user.svg'
+
+import './styles.css'
+
 function TeacherForm(){
     const history = useHistory()
+    const email = localStorage.getItem('email')
 
-    const [name, setName] = useState("")
     const [whatsapp, setWhatsapp] = useState("")
-    const [avatar, setAvatar] = useState("")
     const [bio, setBio] = useState("")
+    const [profileImage, setProfileImage] = useState('')
 
     const [subject, setSubject] = useState("")
     const [cost, setCost] = useState("")
@@ -34,18 +38,15 @@ function TeacherForm(){
         e.preventDefault()
 
         api.post('classes', {
-            name,avatar,whatsapp,bio,subject,cost: Number(cost),schedule: scheduleItems
+            subject, cost: Number(cost), schedule: scheduleItems
+        }, {
+            headers: {'auth-token': localStorage.getItem('auth-token'), 'email': email}
         }).then(() => {
             alert('Cadastro realizado com sucesso.')
             history.push('/')
-        }).catch(() => {
+        }).catch((error) => {
+            console.log(error.response)
             alert('Erro no cadastro.')
-        })
-
-        console.log({
-            name,
-            whatsapp,
-            avatar,bio,scheduleItems
         })
     }
 
@@ -61,6 +62,16 @@ function TeacherForm(){
         setScheduleItems(updatedScheduleItems)
     }
 
+    useEffect(() => {
+        api.get('user', {headers: {'auth-token': localStorage.getItem('auth-token'), 
+        'email': localStorage.getItem('email')}})
+            .then(response => {
+                setWhatsapp(response.data[0].whatsapp)
+                setBio(response.data[0].bio)
+                setProfileImage(response.data[0].path === 'http://localhost:3333/uploads/' ? '' : response.data[0].path)
+            })
+    }, [])
+
     return (
         <div id="page-teacher-form" className="container">
             <PageHeader 
@@ -73,7 +84,12 @@ function TeacherForm(){
                     <fieldset>
                         <legend>Seus dados</legend>
 
-                        <Input 
+                        <span>
+                            <img src={!profileImage ? emptyUserIcon : profileImage} alt=""/>
+                            <p>{localStorage.getItem('username')}</p>
+                        </span>
+
+                        {/* <Input 
                             name="name" 
                             label="Nome completo" 
                             value={name} 
@@ -84,46 +100,54 @@ function TeacherForm(){
                             label="Avatar"
                             value={avatar}
                             onChange={(e) => { setAvatar(e.target.value) }}
-                        />
+                        /> */}
                         <Input 
                             name="whatsapp" 
                             label="Whatsapp"
                             value={whatsapp}
-                            onChange={(e) => { setWhatsapp(e.target.value) }}
+                            placeholder="Exemplo: 61 9 99991111"
+                            readOnly
                         />
                         <Textarea 
                             name="bio" 
                             label="biografia"
                             value={bio}
-                            onChange={(e) => { setBio(e.target.value) }}
+                            placeholder="Escreva brevemente sobre você."
+                            readOnly
+                            
                         />
                     </fieldset>
 
                     <fieldset>
                         <legend>Sobre a aula</legend>
 
-                        <Select
-                            name="subject" 
-                            label="Matéria"
-                            value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
-                            options={[
-                                {  value: 'Artes', label: 'Artes'},
-                                {  value: 'Biologia', label: 'Biologia'},
-                                {  value: 'Ciências', label: 'Ciências'},
-                                {  value: 'Matemática', label: 'Matemática'},
-                                {  value: 'Geografia', label: 'Geografia'},
-                                {  value: 'História', label: 'História'},
-                                {  value: 'Física', label: 'Física'},
-                                {  value: 'Filosofia', label: 'Filosofia'}
-                            ]}
-                        />
-                        <Input 
-                            name="cost" 
-                            label="Custo da sua hora por aula"
-                            value={cost}
-                            onChange={(e) => setCost(e.target.value)}
-                        />
+                        <section className="inputs">
+
+                            <Select
+                                name="subject" 
+                                label="Matéria"
+                                value={subject}
+                                onChange={(e) => setSubject(e.target.value)}
+                                options={[
+                                    {  value: 'Artes', label: 'Artes'},
+                                    {  value: 'Biologia', label: 'Biologia'},
+                                    {  value: 'Ciências', label: 'Ciências'},
+                                    {  value: 'Matemática', label: 'Matemática'},
+                                    {  value: 'Geografia', label: 'Geografia'},
+                                    {  value: 'História', label: 'História'},
+                                    {  value: 'Física', label: 'Física'},
+                                    {  value: 'Filosofia', label: 'Filosofia'}
+                                ]}
+                            />
+                            <Input 
+                                name="cost" 
+                                label="Custo da sua hora por aula"
+                                value={cost}
+                                onChange={(e) => setCost(e.target.value)}
+                                placeholder="R$"
+                            />
+                        </section>
+                        
                     </fieldset>
 
                     <fieldset>
@@ -174,7 +198,7 @@ function TeacherForm(){
                         <p>
                             <img src={warningIcon} alt="aviso importante"/>
                             Importante! <br/>
-                            Preenchar todos os dados
+                            Preencher todos os dados
                         </p>
 
                         <button type="submit">

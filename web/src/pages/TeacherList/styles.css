@@ -3,12 +3,35 @@
     height: 100vh;
 }
 
+#page-teacher-list section{
+    margin-top: 4rem;
+
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    align-items: center;
+}
+
+#page-teacher-list section p{
+    margin-left: 1.2rem;
+    max-width: 250px;
+}
+
+#page-teacher-list main .BouncingP{
+    text-align: center;
+    font-size: 2rem;
+    margin: 8rem 0;
+}
+
 #search-teachers{
     margin-top: 3.2rem;
 }
 
 #search-teachers label{
     color: var(--color-text-in-primary);
+}
+
+#page-teacher-list #search-teachers .select-block{
+    margin-bottom: 2rem;
 }
 
 #search-teachers button{
@@ -20,12 +43,13 @@
     border-radius: 0.8rem;
     cursor: pointer;
     font: 700 1.6rem Archivo;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     text-decoration: none;
     transition: all .2s;
     margin-top: 3.2rem;
+
+    align-self: flex-end;
 }
 
 #search-teachers button:hover{
@@ -35,6 +59,24 @@
 #page-teacher-list main{
     margin: 3.2rem auto;
     width: 90%;
+}
+
+.BouncingP{
+    animation: BoucingP 1s linear infinite;
+}
+
+@keyframes BoucingP{
+    0%{
+        opacity: 0.2;
+    }
+
+    50%{
+        opacity: 1;
+    }
+
+    100%{
+        opacity: 0.2;
+    }
 }
 
 
@@ -60,6 +102,15 @@
     #page-teacher-list main{
         padding: 3.2rem 0;
         max-width: 740px;
-        margin: 0 auto;
+        margin-top: 10rem;
+    }
+
+    #page-teacher-list section{
+        margin: 0;
+    }
+
+    #page-teacher-list #search-teachers .select-block{
+        margin: 0;
+        align-self: flex-end;
     }
 }

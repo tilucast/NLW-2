@@ -5,7 +5,7 @@ import api from '../../services/api'
 
 export interface Teacher{
     id: number
-    avatar: string
+    path: string
     bio: string
     cost: number
     name: string
@@ -29,7 +29,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) =>{
         <article className="teacher-item">
             <header>
                 <img 
-                    src={teacher.avatar} 
+                    src={`http://localhost:3333/uploads/${teacher.path}`} 
                     alt={teacher.name}
                 />
 

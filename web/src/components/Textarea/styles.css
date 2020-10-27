@@ -2,10 +2,6 @@
     position: relative;
 }
 
-.textarea-block:not(:first-child){
-    margin-top: 1.4rem;
-}
-
 .textarea-block label{
     font-size: 1.4rem;
 }

@@ -2,12 +2,55 @@
     width: 100vw;
     height: 100vh;
 
+    display: grid;
+    grid-template-rows: 1fr 5fr;
+    place-items: center;
+
+    color: var(--color-text-in-primary);
+    background: var(--color-primary)
+}
+#page-landing .user-info-logout{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 70%;
+}
+
+.user-info-logout span{
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 18rem;
+}
+
+.user-info-logout img{
+    height: 5.5rem;
+    width: 5.5rem;
+    border-radius: 100%;
+}
+
+#page-landing .logout-icon{
     display: flex;
     align-items: center;
     justify-content: center;
 
-    color: var(--color-text-in-primary);
-    background: var(--color-primary)
+    background-color: var(--color-primary-dark);
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+#page-landing .logout-icon:hover{
+    filter: brightness(105%);
+}
+
+#page-landing .logout-icon img{
+    width: 2rem;
 }
 
 .logo-container img{
@@ -87,7 +130,9 @@
     margin-left: 0.8rem;
 }
 
+
 @media (min-width: 1100px){
+
     #page-landing-content{
         max-width: 1100px;
 

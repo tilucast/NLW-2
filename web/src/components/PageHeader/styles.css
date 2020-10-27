@@ -29,7 +29,6 @@
 
 .page-header .header-content{
     width: 90%;
-    margin: 0 auto;
     position: relative;
     margin: 3.2rem auto;
 }
@@ -45,7 +44,6 @@
     font-size: 1.6rem;
     line-height: 2.6;
     color: var(--color-text-in-primary);
-    margin-top: 2.4rem;
 }
 
 @media(min-width: 700px){
@@ -63,9 +61,9 @@
         margin: 0 auto;
         padding-bottom: 48px;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .page-header .header-content strong{
