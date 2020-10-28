@@ -83,4 +83,35 @@ Para rodar o React : ```` npm run start / yarn start ````.
 
 # Desafios
 
-Nenhum feito ainda.
+# Web
+
+Embora possa ser muito melhorado, a parte web dos desafios está completa. Com todas as funcionalidades propostas implementadas. 
+Autenticação, recuperação de senha, responsivo, design muito próximo do proposto.
+
+--------------------------------
+
+Observações:
+
+Entre em **backend/src/controllers/RecoverEmailController.ts**, e altere as informações de acordo com o serviço de email utilizado.
+Mais informações sobre o envio de emails em <a href="https://nodemailer.com/about/">Nodemailer</a>.
+
+
+A forma de lidar com uploads de imagens está falha. O upload de imagens está funcional, mas o código possui redundâncias, e com certeza pode ser reduzido e melhorado.
+
+
+Imagens do aplicativo web:
+
+<img src="images/newweb1.jpg"></img>
+<img src="images/newweb2.jpg"></img>
+<img src="images/newweb3.jpg"></img>
+<img src="images/newweb4.jpg"></img>
+<img src="images/newweb5.jpg"></img>
+<img src="images/newweb6.jpg"></img>
+<img src="images/newweb7.jpg"></img>
+<img src="images/newweb8.jpg"></img>
+<img src="images/newweb9.jpg"></img>
+
+
+# Mobile
+
+A parte mobile ainda será feita.

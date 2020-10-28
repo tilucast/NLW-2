@@ -22,7 +22,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) =>{
     function createNewConnection(){
         api.post('connections', {
             user_id: teacher.id
-        })
+        }, {headers: {'auth-token': localStorage.getItem('auth-token')}})
     }
 
     return (
